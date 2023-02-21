@@ -1,14 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Orbit : MonoBehaviour
 {
     [SerializeField] private GameObject planet;
+
+    [SerializeField] private TMP_Text timeText;
+    [SerializeField] private TMP_Text rText;
+    [SerializeField] private TMP_Text trueAnomText;
+    [SerializeField] private TMP_Text veloText;
+
     [SerializeField] private float tolerance = 0.00001f;
     [SerializeField] private int numTries = 10;
     [SerializeField] private int resolution = 10000;
-    public float timeMultiplier = 100.0f;
     public float ra = 2;
     public float rp = 1;
     private Planet planetScript;
@@ -23,7 +30,7 @@ public class Orbit : MonoBehaviour
     private float velo;
     private float n;
     private float period;
-    private float time = 0.0f;
+    private float calcTime = 0.0f;
     private Vector2 posFromPlanet = new Vector2(0.0f, 0.0f);
     private Vector3[] positions;
 
@@ -45,13 +52,37 @@ public class Orbit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        time += Time.deltaTime * timeMultiplier;
+        Globals.time += Time.deltaTime * Globals.timeMultiplier;
         SolveKepler();
         CalculateR();
         CalculateVelo();
+        UpdateSatInfoText();
         posFromPlanet.x = r * Mathf.Cos(trueAnom);
         posFromPlanet.y = r * Mathf.Sin(trueAnom);
         transform.position = new Vector3(posFromPlanet.x + planet.transform.position.x, posFromPlanet.y + planet.transform.position.y, 0.0f);
+    }
+
+    private void UpdateSatInfoText() {
+        int sec = (int)Globals.time;
+        int days = sec / (int)Globals.SEC_IN_DAY;
+        sec = sec % (int)Globals.SEC_IN_DAY;
+        int hours = sec / 3600;
+        sec = sec % 3600;
+        int mins = sec / 60;
+        sec = sec % 60;
+
+        timeText.text = days + "d : " + hours + "h : " + mins + "m : " + sec + "s";
+        string rt = String.Format("{0:#,###.##}", r / Globals.KM_TO_SCALE);
+        rText.text = rt + " km";
+        float ta = trueAnom;
+        if (ta < 0) {
+            ta += 2.0f * Mathf.PI;
+        }
+        ta *= Globals.RAD_TO_DEG;
+        string tat = String.Format("{0:#,###.##}", ta);
+        trueAnomText.text =  tat + "°";
+        string vt = String.Format("{0:#,###.##}", velo / Globals.KM_TO_SCALE);
+        veloText.text = vt + " km/s";
     }
 
     private void SolveRaRp() {
@@ -62,7 +93,8 @@ public class Orbit : MonoBehaviour
         CalculateR();
         CalculateVelo();
         n = Mathf.Sqrt(planetScript.gravParameter/Mathf.Pow(a, 3.0f));
-        period = 2.0f * Mathf.PI / Mathf.Sqrt(Mathf.Sqrt(planetScript.gravParameter))*Mathf.Sqrt(Mathf.Pow(r, 3.0f));
+        period = 2.0f * Mathf.PI * Mathf.Sqrt(Mathf.Pow(a, 3.0f) / planetScript.gravParameter);
+        // period = 2.0f * Mathf.PI / Mathf.Sqrt(Mathf.Sqrt(planetScript.gravParameter))*Mathf.Sqrt(Mathf.Pow(r, 3.0f)); // big oops
     }
 
     private float EccentricAnomToTrueAnom(float eAnom) {
@@ -79,17 +111,18 @@ public class Orbit : MonoBehaviour
 
     private void SolveKepler() {
         // time = periods % time; // oops...
-        time = time % period;
-        float answer = n * time;
+        calcTime = Globals.time % period;
+        float answer = n * calcTime;
         float check = eccAnom - e * Mathf.Sin(eccAnom);
         int i = 0;
         while (Mathf.Abs(answer-check) > tolerance && i < numTries) {
-            eccAnom = eccAnom - (eccAnom - e * Mathf.Sin(eccAnom) - n * time) / (1 - e * Mathf.Cos(eccAnom));
+            eccAnom = eccAnom - (eccAnom - e * Mathf.Sin(eccAnom) - n * calcTime) / (1 - e * Mathf.Cos(eccAnom));
             check = eccAnom - e * Mathf.Sin(eccAnom);
             i++;
         }
-        if (eccAnom > 2.0f * Mathf.PI)
+        if (eccAnom > 2.0f * Mathf.PI) {
             eccAnom -= 2.0f * Mathf.PI;
+        }
         trueAnom = EccentricAnomToTrueAnom(eccAnom);
     }
 

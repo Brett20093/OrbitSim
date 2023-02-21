@@ -64,5 +64,11 @@ public class CamControls : MonoBehaviour
         if (Input.GetKey(KeyCode.S)) {
             transform.position += new Vector3(0, -1, 0) * Time.deltaTime * camSpeed;
         }
+        if (Input.GetKeyDown(KeyCode.RightArrow)) {
+            Globals.timeMultiplier *= 4.0f;
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+            Globals.timeMultiplier /= 4.0f;
+        }
     }
 }
