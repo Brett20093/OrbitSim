@@ -59,8 +59,8 @@
     <Compile Include="Assets\Orbit.cs" />
     <Compile Include="Assets\CamControls.cs" />
     <Compile Include="Assets\Planet.cs" />
-    <Compile Include="Assets\Globals.cs" />
     <Compile Include="Assets\EarthRotation.cs" />
+    <Compile Include="Assets\Globals.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

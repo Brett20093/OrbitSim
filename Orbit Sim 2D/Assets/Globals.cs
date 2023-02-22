@@ -10,7 +10,7 @@ class Globals {
     public const float DEG_TO_RAD = (float)Math.PI / 180.0f;
     public const float SEC_IN_DAY = 86400.0f;
 
-    public static float timeMultiplier = 9000.0f;
+    public static float timeMultiplier = 1000.0f;
 
     public static float time = 0.0f;
 }

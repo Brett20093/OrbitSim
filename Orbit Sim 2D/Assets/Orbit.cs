@@ -16,6 +16,9 @@ public class Orbit : MonoBehaviour
     [SerializeField] private float tolerance = 0.00001f;
     [SerializeField] private int numTries = 10;
     [SerializeField] private int resolution = 10000;
+
+    [SerializeField] private float littleOmega = 0.0f;
+
     public float ra = 2;
     public float rp = 1;
     private Planet planetScript;
@@ -25,6 +28,7 @@ public class Orbit : MonoBehaviour
     private float energy;
     private float e;
     private float trueAnom;
+    private float theta;
     private float eccAnom;
     private float r;
     private float velo;
@@ -39,9 +43,11 @@ public class Orbit : MonoBehaviour
     {
         planetScript = planet.GetComponent<Planet>();
         trueAnom = 0.0f;
+        littleOmega *= Globals.DEG_TO_RAD;
+        theta = littleOmega + trueAnom;
         SolveRaRp();
 
-        positions = CreateEllipse(a, b, resolution);
+        positions = CreateEllipse(resolution);
         LineRenderer lr = GetComponent<LineRenderer>();
         lr.positionCount = resolution + 1;
         for (int i = 0; i <= resolution; i++) {
@@ -57,8 +63,8 @@ public class Orbit : MonoBehaviour
         CalculateR();
         CalculateVelo();
         UpdateSatInfoText();
-        posFromPlanet.x = r * Mathf.Cos(trueAnom);
-        posFromPlanet.y = r * Mathf.Sin(trueAnom);
+        posFromPlanet.x = r * Mathf.Cos(theta);
+        posFromPlanet.y = r * Mathf.Sin(theta);
         transform.position = new Vector3(posFromPlanet.x + planet.transform.position.x, posFromPlanet.y + planet.transform.position.y, 0.0f);
     }
 
@@ -124,6 +130,7 @@ public class Orbit : MonoBehaviour
             eccAnom -= 2.0f * Mathf.PI;
         }
         trueAnom = EccentricAnomToTrueAnom(eccAnom);
+        theta = littleOmega + trueAnom;
     }
 
     private void CalculateR() {
@@ -134,15 +141,17 @@ public class Orbit : MonoBehaviour
         velo = Mathf.Sqrt(2.0f * energy + (2.0f * planetScript.gravParameter) / r);
     }
 
-    Vector3[] CreateEllipse(float a, float b, int resolution) {
+    Vector3[] CreateEllipse(int resolution) {
 
         Vector3[] positions = new Vector3[resolution + 1];
         Vector3 center = new Vector3(planet.transform.position.x, planet.transform.position.y, 0.0f);
 
         for (int i = 0; i <= resolution; i++) {
-            float angle = (float)i / (float)resolution * 2.0f * Mathf.PI;
-            positions[i] = new Vector3(a * Mathf.Cos(angle), b * Mathf.Sin(angle), 0.0f);
-            positions[i] = positions[i] + center - new Vector3(a*e, 0, 0);
+            float angle = (float)i / resolution * 2.0f * Mathf.PI;
+            float rEllipse = a * (1.0f - Mathf.Pow(e, 2.0f)) / (1.0f + e * Mathf.Cos(angle));
+            float xEllipse = rEllipse * Mathf.Cos(angle + littleOmega);
+            float yEllipse = rEllipse * Mathf.Sin(angle + littleOmega);
+            positions[i] = new Vector3(xEllipse + planet.transform.position.x, yEllipse + planet.transform.position.y, 0.0f);
         }
 
         return positions;

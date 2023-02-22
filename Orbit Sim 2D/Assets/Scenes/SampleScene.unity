@@ -425,7 +425,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planet: {fileID: 2036359451}
   satellite: {fileID: 1232183221}
-  camSpeed: 500
+  camSpeed: 2000
 --- !u!1 &1084011901
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,7 +641,7 @@ Transform:
   m_GameObject: {fileID: 1232183221}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 700, y: 0, z: 0}
-  m_LocalScale: {x: 20, y: 20, z: 1}
+  m_LocalScale: {x: 80, y: 80, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -667,7 +667,8 @@ MonoBehaviour:
   tolerance: 0.00001
   numTries: 10
   resolution: 10000
-  ra: 20000
+  littleOmega: 314
+  ra: 2000
   rp: 690
 --- !u!120 &1232183225
 LineRenderer:
@@ -1223,7 +1224,7 @@ Transform:
   m_GameObject: {fileID: 2036359451}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 500, y: 500, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
