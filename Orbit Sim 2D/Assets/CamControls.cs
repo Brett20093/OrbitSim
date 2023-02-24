@@ -8,6 +8,7 @@ public class CamControls : MonoBehaviour
     [SerializeField] private GameObject planet;
     [SerializeField] private GameObject satellite;
     [SerializeField] private float camSpeed = 500.0f;
+    [SerializeField] private float camZoomSpeed = 1000.0f;
     private Camera cam;
     private const int FREE = 0;
     private const int SAT = 1;
@@ -23,9 +24,9 @@ public class CamControls : MonoBehaviour
     void Update()
     {
         if (Input.GetAxis("Mouse ScrollWheel") > 0) {
-            cam.fieldOfView--;
+            cam.transform.position -= new Vector3(0, 0, 1) * Time.deltaTime * camZoomSpeed;
         } else if (Input.GetAxis("Mouse ScrollWheel") < 0) {
-            cam.fieldOfView++;
+            cam.transform.position += new Vector3(0, 0, 1) * Time.deltaTime * camZoomSpeed;
         }
 
         if (Input.GetKeyDown(KeyCode.E)) {

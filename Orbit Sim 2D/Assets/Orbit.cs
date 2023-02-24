@@ -8,6 +8,10 @@ public class Orbit : MonoBehaviour
 {
     [SerializeField] private GameObject planet;
 
+    [SerializeField] private TMP_InputField rpInput;
+    [SerializeField] private TMP_InputField raInput;
+    [SerializeField] private TMP_InputField littleOmegaInput;
+
     [SerializeField] private TMP_Text timeText;
     [SerializeField] private TMP_Text rText;
     [SerializeField] private TMP_Text trueAnomText;
@@ -36,7 +40,9 @@ public class Orbit : MonoBehaviour
     private float period;
     private float calcTime = 0.0f;
     private Vector2 posFromPlanet = new Vector2(0.0f, 0.0f);
-    private Vector3[] positions;
+    private Vector3[] ellipsePositions;
+
+    private LineRenderer orbitLine;
 
     // Start is called before the first frame update
     void Start()
@@ -46,12 +52,16 @@ public class Orbit : MonoBehaviour
         littleOmega *= Globals.DEG_TO_RAD;
         theta = littleOmega + trueAnom;
         SolveRaRp();
+        orbitLine = transform.Find("OrbitLineRenderer").GetComponent<LineRenderer>();
+        UpdateOrbitLine();
+    }
 
-        positions = CreateEllipse(resolution);
-        LineRenderer lr = GetComponent<LineRenderer>();
-        lr.positionCount = resolution + 1;
+    private void UpdateOrbitLine() {
+        ellipsePositions = null;
+        ellipsePositions = CreateEllipse(resolution);
+        orbitLine.positionCount = resolution + 1;
         for (int i = 0; i <= resolution; i++) {
-            lr.SetPosition(i, positions[i]);
+            orbitLine.SetPosition(i, ellipsePositions[i]);
         }
     }
 
@@ -155,5 +165,18 @@ public class Orbit : MonoBehaviour
         }
 
         return positions;
+    }
+
+    public void UpdateOrbit() {
+        try {
+            ra = float.Parse(raInput.text) * Globals.KM_TO_SCALE;
+            rp = float.Parse(rpInput.text) * Globals.KM_TO_SCALE;
+            littleOmega = float.Parse(littleOmegaInput.text) * Globals.DEG_TO_RAD;
+        } catch (FormatException exception) {
+            Debug.Log(exception.ToString());
+            return;
+        }
+        SolveRaRp();
+        UpdateOrbitLine();
     }
 }
