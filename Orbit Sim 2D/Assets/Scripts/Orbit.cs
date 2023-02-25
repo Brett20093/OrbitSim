@@ -6,36 +6,27 @@ using UnityEngine;
 
 public class Orbit : MonoBehaviour
 {
-    [SerializeField] private GameObject planet;
-
-    [SerializeField] private TMP_InputField rpInput;
-    [SerializeField] private TMP_InputField raInput;
-    [SerializeField] private TMP_InputField littleOmegaInput;
-
-    [SerializeField] private TMP_Text timeText;
-    [SerializeField] private TMP_Text rText;
-    [SerializeField] private TMP_Text trueAnomText;
-    [SerializeField] private TMP_Text veloText;
+    [SerializeField] protected GameObject planet;
+    protected Planet planetScript;
 
     [SerializeField] private float tolerance = 0.00001f;
     [SerializeField] private int numTries = 10;
     [SerializeField] private int resolution = 10000;
 
-    [SerializeField] private float littleOmega = 0.0f;
+    [SerializeField] protected float littleOmega = 0.0f;
 
-    public float ra = 2;
-    public float rp = 1;
-    private Planet planetScript;
+    public float ra = 2000;
+    public float rp = 1000;
 
     private float a;
     private float b;
-    private float energy;
+    protected float energy;
     private float e;
-    private float trueAnom;
+    protected float trueAnom;
     private float theta;
     private float eccAnom;
-    private float r;
-    private float velo;
+    protected float r;
+    protected float velo;
     private float n;
     private float period;
     private float calcTime = 0.0f;
@@ -45,8 +36,10 @@ public class Orbit : MonoBehaviour
     private LineRenderer orbitLine;
 
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
+        ra *= Globals.KM_TO_SCALE;
+        rp *= Globals.KM_TO_SCALE;
         planetScript = planet.GetComponent<Planet>();
         trueAnom = 0.0f;
         littleOmega *= Globals.DEG_TO_RAD;
@@ -56,7 +49,7 @@ public class Orbit : MonoBehaviour
         UpdateOrbitLine();
     }
 
-    private void UpdateOrbitLine() {
+    protected void UpdateOrbitLine() {
         ellipsePositions = null;
         ellipsePositions = CreateEllipse(resolution);
         orbitLine.positionCount = resolution + 1;
@@ -66,42 +59,18 @@ public class Orbit : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
-        Globals.time += Time.deltaTime * Globals.timeMultiplier;
         SolveKepler();
         CalculateR();
         CalculateVelo();
-        UpdateSatInfoText();
         posFromPlanet.x = r * Mathf.Cos(theta);
         posFromPlanet.y = r * Mathf.Sin(theta);
         transform.position = new Vector3(posFromPlanet.x + planet.transform.position.x, posFromPlanet.y + planet.transform.position.y, 0.0f);
+        UpdateOrbitLine();
     }
 
-    private void UpdateSatInfoText() {
-        int sec = (int)Globals.time;
-        int days = sec / (int)Globals.SEC_IN_DAY;
-        sec = sec % (int)Globals.SEC_IN_DAY;
-        int hours = sec / 3600;
-        sec = sec % 3600;
-        int mins = sec / 60;
-        sec = sec % 60;
-
-        timeText.text = days + "d : " + hours + "h : " + mins + "m : " + sec + "s";
-        string rt = String.Format("{0:#,###.##}", r / Globals.KM_TO_SCALE);
-        rText.text = rt + " km";
-        float ta = trueAnom;
-        if (ta < 0) {
-            ta += 2.0f * Mathf.PI;
-        }
-        ta *= Globals.RAD_TO_DEG;
-        string tat = String.Format("{0:#,###.##}", ta);
-        trueAnomText.text =  tat + "°";
-        string vt = String.Format("{0:#,###.##}", velo / Globals.KM_TO_SCALE);
-        veloText.text = vt + " km/s";
-    }
-
-    private void SolveRaRp() {
+    protected void SolveRaRp() {
         a = (ra + rp) / 2.0f;
         energy = -1.0f * planetScript.gravParameter / (2.0f * a);
         e = (ra - rp) / (ra + rp);
@@ -127,7 +96,7 @@ public class Orbit : MonoBehaviour
 
     private void SolveKepler() {
         // time = periods % time; // oops...
-        calcTime = Globals.time % period;
+        calcTime = TimeKeeper.instance.time % period;
         float answer = n * calcTime;
         float check = eccAnom - e * Mathf.Sin(eccAnom);
         int i = 0;
@@ -165,18 +134,5 @@ public class Orbit : MonoBehaviour
         }
 
         return positions;
-    }
-
-    public void UpdateOrbit() {
-        try {
-            ra = float.Parse(raInput.text) * Globals.KM_TO_SCALE;
-            rp = float.Parse(rpInput.text) * Globals.KM_TO_SCALE;
-            littleOmega = float.Parse(littleOmegaInput.text) * Globals.DEG_TO_RAD;
-        } catch (FormatException exception) {
-            Debug.Log(exception.ToString());
-            return;
-        }
-        SolveRaRp();
-        UpdateOrbitLine();
     }
 }
