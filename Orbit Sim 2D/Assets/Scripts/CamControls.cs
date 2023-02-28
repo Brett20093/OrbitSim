@@ -8,12 +8,15 @@ public class CamControls : MonoBehaviour
     [SerializeField] private GameObject planet;
     [SerializeField] private GameObject satellite;
     [SerializeField] private float camSpeed = 500.0f;
-    [SerializeField] private float camZoomSpeed = 1000.0f;
     private Camera cam;
     private const int FREE = 0;
     private const int SAT = 1;
     private const int PLANET = 2;
     private int camState = FREE;
+    private float camZoomFactor = 0.01f;
+    private const float MAX_CAM_DISTANCE = 100000.0f;
+    private float timeMultFactor = 0.01f;
+    private const float MAX_TIME_FACTOR = 100000.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,9 +27,15 @@ public class CamControls : MonoBehaviour
     void Update()
     {
         if (Input.GetAxis("Mouse ScrollWheel") > 0) {
-            cam.transform.position -= new Vector3(0, 0, 1) * Time.deltaTime * camZoomSpeed;
+            if (camZoomFactor < 1.0f) {
+                camZoomFactor += Time.deltaTime;
+                cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y, -1.0f * Mathf.Pow(camZoomFactor, 3.0f) * MAX_CAM_DISTANCE);
+            }
         } else if (Input.GetAxis("Mouse ScrollWheel") < 0) {
-            cam.transform.position += new Vector3(0, 0, 1) * Time.deltaTime * camZoomSpeed;
+            if (camZoomFactor > 0.0001f) {
+                camZoomFactor -= Time.deltaTime;
+                cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y, - 1.0f * Mathf.Pow(camZoomFactor, 3.0f) * MAX_CAM_DISTANCE);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.E)) {
@@ -50,6 +59,21 @@ public class CamControls : MonoBehaviour
             default:
                 break;
         }
+
+        if (Input.GetKey(KeyCode.RightArrow)) {
+            if (timeMultFactor < 1.0f) {
+                timeMultFactor += Time.deltaTime;
+                Globals.timeMultiplier = Mathf.Pow(timeMultFactor, 3.0f) * MAX_TIME_FACTOR + 1.0f;
+            }
+            Debug.Log("Right mult: " + Globals.timeMultiplier);
+        }
+        if (Input.GetKey(KeyCode.LeftArrow)) {
+            if (timeMultFactor > 0) {
+                timeMultFactor -= Time.deltaTime;
+                Globals.timeMultiplier = Mathf.Pow(timeMultFactor, 3.0f) * MAX_TIME_FACTOR + 1.0f;
+            }
+            Debug.Log("Left mult: " + Globals.timeMultiplier);
+        }
     }
 
     private void FreeCamControls() {
@@ -64,12 +88,6 @@ public class CamControls : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.S)) {
             transform.position += new Vector3(0, -1, 0) * Time.deltaTime * camSpeed;
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow)) {
-            Globals.timeMultiplier *= 4.0f;
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-            Globals.timeMultiplier /= 4.0f;
         }
     }
 }

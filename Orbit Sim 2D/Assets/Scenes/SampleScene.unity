@@ -1449,7 +1449,7 @@ GameObject:
   - component: {fileID: 1024960907}
   - component: {fileID: 1024960906}
   m_Layer: 0
-  m_Name: Sun
+  m_Name: Earth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3305,6 +3305,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8246124650450529136, guid: 7085bbc645622164cad84da118c43182, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5e0472cadc8f8eb4f8664eab8cb96f71, type: 3}
     - target: {fileID: 8246124650450529137, guid: 7085bbc645622164cad84da118c43182, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -3349,13 +3353,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8246124650450529138, guid: 7085bbc645622164cad84da118c43182, type: 3}
+      propertyPath: radius
+      value: 1737.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8246124650450529138, guid: 7085bbc645622164cad84da118c43182, type: 3}
+      propertyPath: gravParameter
+      value: 4902.8696
+      objectReference: {fileID: 0}
+    - target: {fileID: 8246124650450529138, guid: 7085bbc645622164cad84da118c43182, type: 3}
+      propertyPath: secInPlanetDay
+      value: 2551444
+      objectReference: {fileID: 0}
     - target: {fileID: 8246124650450529139, guid: 7085bbc645622164cad84da118c43182, type: 3}
       propertyPath: ra
-      value: 30000
+      value: 405500
       objectReference: {fileID: 0}
     - target: {fileID: 8246124650450529139, guid: 7085bbc645622164cad84da118c43182, type: 3}
       propertyPath: rp
-      value: 32000
+      value: 363300
       objectReference: {fileID: 0}
     - target: {fileID: 8246124650450529139, guid: 7085bbc645622164cad84da118c43182, type: 3}
       propertyPath: planet
@@ -3363,11 +3379,11 @@ PrefabInstance:
       objectReference: {fileID: 1024960905}
     - target: {fileID: 8246124650450529139, guid: 7085bbc645622164cad84da118c43182, type: 3}
       propertyPath: littleOmega
-      value: 45
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8246124650450529143, guid: 7085bbc645622164cad84da118c43182, type: 3}
       propertyPath: m_Name
-      value: Earth
+      value: Moon
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7085bbc645622164cad84da118c43182, type: 3}
