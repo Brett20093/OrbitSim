@@ -6,6 +6,7 @@ public class Planet : MonoBehaviour
 {
     public float gravParameter = 398600.0f; // km^3 * s^-2
     public float radius = 6378.1f; // km
+    public bool isSatellite = false;
     [SerializeField] public float secInPlanetDay = 86400.0f;
 
     private float timeOfPlanetDay = 0.0f;
@@ -17,15 +18,18 @@ public class Planet : MonoBehaviour
 
     // Start is called before the first frame update
 
-    void Start()
+    protected void Start()
     {
         transform.localScale = new Vector2(radius * 2.0f, radius * 2.0f);
+        OrbitManager.instance.AddPlanet(this);
     }
 
-    void Update() {
-        timeOfPlanetDay = TimeKeeper.instance.time % secInPlanetDay;
-        float rotationRad = (timeOfPlanetDay * 360.0f) / secInPlanetDay;
-        var rotation = Quaternion.AngleAxis(rotationRad, Vector3.forward);
-        transform.rotation = rotation;
+    protected void Update() {
+        if (!isSatellite) {
+            timeOfPlanetDay = (float)TimeKeeper.instance.time % secInPlanetDay;
+            double rotationRad = (timeOfPlanetDay * 360.0) / secInPlanetDay;
+            var rotation = Quaternion.AngleAxis((float)rotationRad, Vector3.forward);
+            transform.rotation = rotation;
+        }
     }
 }

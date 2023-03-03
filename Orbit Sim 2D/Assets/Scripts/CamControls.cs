@@ -9,14 +9,13 @@ public class CamControls : MonoBehaviour
     [SerializeField] private GameObject satellite;
     [SerializeField] private float camSpeed = 500.0f;
     private Camera cam;
-    private const int FREE = 0;
-    private const int SAT = 1;
-    private const int PLANET = 2;
-    private int camState = FREE;
-    private float camZoomFactor = 0.01f;
+    private float camZoomFactor = 0.2f;
     private const float MAX_CAM_DISTANCE = 100000.0f;
     private float timeMultFactor = 0.01f;
     private const float MAX_TIME_FACTOR = 100000.0f;
+    private Vector3 focusPosition = new Vector3(0,0,0);
+    private GameObject focusGO = null;
+    private int focusIndex = -1;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,25 +38,20 @@ public class CamControls : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.E)) {
-            if (camState == PLANET) {
-                camState = FREE;
+            if (focusIndex >= OrbitManager.instance.planets.Count-1) {
+                focusIndex = -1;
+                focusGO = null;
             } else {
-                camState++;
+                focusIndex++;
+                focusPosition = new Vector3(0, 0, 0);
+                focusGO = OrbitManager.instance.planets[focusIndex].gameObject;
             }
         }
 
-        switch (camState) {
-            case FREE:
-                FreeCamControls();
-                break;
-            case SAT:
-                transform.position = new Vector3(satellite.transform.position.x, satellite.transform.position.y, transform.position.z);
-                break;
-            case PLANET:
-                transform.position = new Vector3(planet.transform.position.x, planet.transform.position.y, transform.position.z);
-                break;
-            default:
-                break;
+        if (focusGO != null) {
+            CamControlsFocus(focusGO);
+        } else {
+            FreeCamControls();
         }
 
         if (Input.GetKey(KeyCode.RightArrow)) {
@@ -65,15 +59,29 @@ public class CamControls : MonoBehaviour
                 timeMultFactor += Time.deltaTime;
                 Globals.timeMultiplier = Mathf.Pow(timeMultFactor, 3.0f) * MAX_TIME_FACTOR + 1.0f;
             }
-            Debug.Log("Right mult: " + Globals.timeMultiplier);
         }
         if (Input.GetKey(KeyCode.LeftArrow)) {
             if (timeMultFactor > 0) {
                 timeMultFactor -= Time.deltaTime;
                 Globals.timeMultiplier = Mathf.Pow(timeMultFactor, 3.0f) * MAX_TIME_FACTOR + 1.0f;
             }
-            Debug.Log("Left mult: " + Globals.timeMultiplier);
         }
+    }
+
+    private void CamControlsFocus(GameObject focus) {
+        if (Input.GetKey(KeyCode.D)) {
+            focusPosition += new Vector3(1, 0, 0) * Time.deltaTime * camSpeed;
+        }
+        if (Input.GetKey(KeyCode.W)) {
+            focusPosition += new Vector3(0, 1, 0) * Time.deltaTime * camSpeed;
+        }
+        if (Input.GetKey(KeyCode.A)) {
+            focusPosition += new Vector3(-1, 0, 0) * Time.deltaTime * camSpeed;
+        }
+        if (Input.GetKey(KeyCode.S)) {
+            focusPosition += new Vector3(0, -1, 0) * Time.deltaTime * camSpeed;
+        }
+        transform.position = new Vector3(focus.transform.position.x + focusPosition.x, focus.transform.position.y + focusPosition.y, transform.position.z);
     }
 
     private void FreeCamControls() {

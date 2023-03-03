@@ -62,6 +62,7 @@
     <Compile Include="Assets\Scripts\Planet.cs" />
     <Compile Include="Assets\Scripts\Satellite.cs" />
     <Compile Include="Assets\Scripts\Globals.cs" />
+    <Compile Include="Assets\Scripts\OrbitManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

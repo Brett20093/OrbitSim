@@ -14,7 +14,7 @@ public class TimeKeeper : MonoBehaviour
         instance = this;
     }
     #endregion
-    public float time;
+    public double time;
     // Start is called before the first frame update
     void Start()
     {

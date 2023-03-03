@@ -47,6 +47,7 @@ public class Orbit : MonoBehaviour
         SolveRaRp();
         orbitLine = transform.Find("OrbitLineRenderer").GetComponent<LineRenderer>();
         UpdateOrbitLine();
+        OrbitManager.instance.AddOrbit(this);
     }
 
     protected void UpdateOrbitLine() {
@@ -96,7 +97,7 @@ public class Orbit : MonoBehaviour
 
     private void SolveKepler() {
         // time = periods % time; // oops...
-        calcTime = TimeKeeper.instance.time % period;
+        calcTime = (float)TimeKeeper.instance.time % period;
         float answer = n * calcTime;
         float check = eccAnom - e * Mathf.Sin(eccAnom);
         int i = 0;
