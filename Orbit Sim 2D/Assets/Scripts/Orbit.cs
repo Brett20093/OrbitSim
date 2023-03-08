@@ -33,7 +33,7 @@ public class Orbit : MonoBehaviour
     private Vector2 posFromPlanet = new Vector2(0.0f, 0.0f);
     private Vector3[] ellipsePositions;
 
-    private LineRenderer orbitLine;
+    public LineRenderer orbitLine;
 
     // Start is called before the first frame update
     protected void Start()

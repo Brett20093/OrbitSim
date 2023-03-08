@@ -14,25 +14,44 @@ public class OrbitManager : MonoBehaviour {
     }
     #endregion
 
-    public List<Planet> planets;
-    public List<Orbit> orbits;
+    public List<Planet> planets = new List<Planet>();
+    public List<Orbit> orbits = new List<Orbit>();
 
     void Start() {
-        planets = new List<Planet>();
-        orbits = new List<Orbit>();
+        Orbit[] findOrbits = FindObjectsOfType<Orbit>();
+        for (int i = 0; i < findOrbits.Length; i++) {
+            if(!orbits.Contains(findOrbits[i])) {
+                AddOrbit(findOrbits[i]);
+            }
+        }
+        Planet[] findPlanets = FindObjectsOfType<Planet>();
+        for (int i = 0; i < findPlanets.Length; i++) {
+            if (!planets.Contains(findPlanets[i])) {
+                AddPlanet(findPlanets[i]);
+            }
+        }
     }
 
     public void AddPlanet(Planet planet) {
-        planets.Add(planet);
+        if (!planets.Contains(planet))
+            planets.Add(planet);
     }
     public void RemovePlanet(Planet planet) {
         planets.Remove(planet);
     }
 
     public void AddOrbit(Orbit orbit) {
-        orbits.Add(orbit);
+        if (!orbits.Contains(orbit))
+            orbits.Add(orbit);
     }
     public void RemoveOrbit(Orbit orbit) {
         orbits.Remove(orbit);
+    }
+
+    public void SetOrbitLineWidths(float width) {
+        for (int i = 0; i < orbits.Count; i++) {
+            orbits[i].orbitLine.startWidth = width;
+            orbits[i].orbitLine.endWidth = width;
+        }
     }
 }

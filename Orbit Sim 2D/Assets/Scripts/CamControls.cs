@@ -28,12 +28,16 @@ public class CamControls : MonoBehaviour
         if (Input.GetAxis("Mouse ScrollWheel") > 0) {
             if (camZoomFactor < 1.0f) {
                 camZoomFactor += Time.deltaTime;
-                cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y, -1.0f * Mathf.Pow(camZoomFactor, 3.0f) * MAX_CAM_DISTANCE);
+                float multiplier = Mathf.Pow(camZoomFactor, 3.0f);
+                OrbitManager.instance.SetOrbitLineWidths(1000.0f * multiplier);
+                cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y, -1.0f * multiplier * MAX_CAM_DISTANCE);
             }
         } else if (Input.GetAxis("Mouse ScrollWheel") < 0) {
             if (camZoomFactor > 0.0001f) {
                 camZoomFactor -= Time.deltaTime;
-                cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y, - 1.0f * Mathf.Pow(camZoomFactor, 3.0f) * MAX_CAM_DISTANCE);
+                float multiplier = Mathf.Pow(camZoomFactor, 3.0f);
+                OrbitManager.instance.SetOrbitLineWidths(1000.0f * multiplier);
+                cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y, - 1.0f * multiplier * MAX_CAM_DISTANCE);
             }
         }
 
