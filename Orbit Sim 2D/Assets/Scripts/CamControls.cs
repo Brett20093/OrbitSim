@@ -7,12 +7,14 @@ public class CamControls : MonoBehaviour
 {
     [SerializeField] private GameObject planet;
     [SerializeField] private GameObject satellite;
-    [SerializeField] private float camSpeed = 500.0f;
+    private float camSpeed = 500.0f;
     private Camera cam;
     private float camZoomFactor = 0.2f;
     private const float MAX_CAM_DISTANCE = 100000.0f;
     private float timeMultFactor = 0.01f;
     private const float MAX_TIME_FACTOR = 100000.0f;
+    private const float MAX_LINE_WIDTH = 1000.0f;
+    private const float MAX_CAM_SPEED = 100000.0f;
     private Vector3 focusPosition = new Vector3(0,0,0);
     private GameObject focusGO = null;
     private int focusIndex = -1;
@@ -20,6 +22,14 @@ public class CamControls : MonoBehaviour
     void Start()
     {
         cam = GetComponent<Camera>();
+        float multiplier = Mathf.Pow(camZoomFactor, 3.0f);
+        SetCamZoom(multiplier);
+    }
+
+    private void SetCamZoom(float multiplier) {
+        OrbitManager.instance.SetOrbitLineWidths(MAX_LINE_WIDTH * multiplier);
+        camSpeed = MAX_CAM_SPEED * multiplier;
+        cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y, -1.0f * multiplier * MAX_CAM_DISTANCE);
     }
 
     // Update is called once per frame
@@ -29,15 +39,13 @@ public class CamControls : MonoBehaviour
             if (camZoomFactor < 1.0f) {
                 camZoomFactor += Time.deltaTime;
                 float multiplier = Mathf.Pow(camZoomFactor, 3.0f);
-                OrbitManager.instance.SetOrbitLineWidths(1000.0f * multiplier);
-                cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y, -1.0f * multiplier * MAX_CAM_DISTANCE);
+                SetCamZoom(multiplier);
             }
         } else if (Input.GetAxis("Mouse ScrollWheel") < 0) {
             if (camZoomFactor > 0.0001f) {
                 camZoomFactor -= Time.deltaTime;
                 float multiplier = Mathf.Pow(camZoomFactor, 3.0f);
-                OrbitManager.instance.SetOrbitLineWidths(1000.0f * multiplier);
-                cam.transform.position = new Vector3(cam.transform.position.x, cam.transform.position.y, - 1.0f * multiplier * MAX_CAM_DISTANCE);
+                SetCamZoom(multiplier);
             }
         }
 

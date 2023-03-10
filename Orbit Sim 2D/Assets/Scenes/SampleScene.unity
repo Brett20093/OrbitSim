@@ -1921,13 +1921,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99303395c91e8ee4aaa5ef8e1072729f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planet: {fileID: 2036359451}
+  planet: {fileID: 1024960905}
   tolerance: 0.00001
   numTries: 10
   resolution: 10000
-  littleOmega: 314
-  ra: 6700
-  rp: 6600
+  littleOmega: 0
+  ra: 6800.1
+  rp: 6791.1
+  orbitLine: {fileID: 0}
 --- !u!114 &1232183225
 MonoBehaviour:
   m_ObjectHideFlags: 0
