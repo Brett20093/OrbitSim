@@ -68,15 +68,20 @@ public class CamControls : MonoBehaviour
 
         if (Input.GetKey(KeyCode.RightArrow)) {
             if (timeMultFactor < 1.0f) {
-                timeMultFactor += Time.deltaTime;
-                Globals.timeMultiplier = Mathf.Pow(timeMultFactor, 3.0f) * MAX_TIME_FACTOR + 1.0f;
+                timeMultFactor += Time.deltaTime/10.0f;
+            } else {
+                timeMultFactor = 1.0f;
             }
+            Globals.timeMultiplier = Mathf.Pow(timeMultFactor, 3.0f) * MAX_TIME_FACTOR + 1.0f;
         }
         if (Input.GetKey(KeyCode.LeftArrow)) {
             if (timeMultFactor > 0) {
-                timeMultFactor -= Time.deltaTime;
-                Globals.timeMultiplier = Mathf.Pow(timeMultFactor, 3.0f) * MAX_TIME_FACTOR + 1.0f;
+                timeMultFactor -= Time.deltaTime/10.0f;
+                
+            } else {
+                timeMultFactor = 0;
             }
+            Globals.timeMultiplier = Mathf.Pow(timeMultFactor, 3.0f) * MAX_TIME_FACTOR + 1.0f;
         }
     }
 

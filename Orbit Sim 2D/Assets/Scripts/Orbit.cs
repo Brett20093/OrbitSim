@@ -136,4 +136,9 @@ public class Orbit : MonoBehaviour
 
         return positions;
     }
+
+    public float getTrueAnom() { return trueAnom; }
+    public float getVelo() { return velo; }
+    public float getR() { return r; }
+    public Planet getPlanetScript() { return planetScript; }
 }

@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\TimeKeeper.cs" />
+    <Compile Include="Assets\Scripts\CamInteract.cs" />
     <Compile Include="Assets\Scripts\Orbit.cs" />
     <Compile Include="Assets\Scripts\CamControls.cs" />
     <Compile Include="Assets\Scripts\OrbitManager.cs" />
