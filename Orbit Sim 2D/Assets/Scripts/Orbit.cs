@@ -50,7 +50,7 @@ public class Orbit : MonoBehaviour
         OrbitManager.instance.AddOrbit(this);
     }
 
-    protected void UpdateOrbitLine() {
+    public void UpdateOrbitLine() {
         ellipsePositions = null;
         ellipsePositions = CreateEllipse(resolution);
         orbitLine.positionCount = resolution + 1;
@@ -71,7 +71,7 @@ public class Orbit : MonoBehaviour
         UpdateOrbitLine();
     }
 
-    protected void SolveRaRp() {
+    public void SolveRaRp() {
         a = (ra + rp) / 2.0f;
         energy = -1.0f * planetScript.gravParameter / (2.0f * a);
         e = (ra - rp) / (ra + rp);
@@ -137,8 +137,12 @@ public class Orbit : MonoBehaviour
         return positions;
     }
 
-    public float getTrueAnom() { return trueAnom; }
-    public float getVelo() { return velo; }
-    public float getR() { return r; }
-    public Planet getPlanetScript() { return planetScript; }
+    public void SetLittleOmega(float lo) {
+        littleOmega = lo;
+    }
+
+    public float GetTrueAnom() { return trueAnom; }
+    public float GetVelo() { return velo; }
+    public float GetR() { return r; }
+    public Planet GetPlanetScript() { return planetScript; }
 }

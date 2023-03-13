@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class OrbitManager : MonoBehaviour {
@@ -14,8 +16,15 @@ public class OrbitManager : MonoBehaviour {
     }
     #endregion
 
+    [SerializeField] private TMP_InputField rpInput;
+    [SerializeField] private TMP_InputField raInput;
+    [SerializeField] private TMP_InputField littleOmegaInput;
+
     public List<Planet> planets = new List<Planet>();
     public List<Orbit> orbits = new List<Orbit>();
+
+    private Planet selectedPlanet;
+    private Orbit selectedOrbit;
 
     void Start() {
         Orbit[] findOrbits = FindObjectsOfType<Orbit>();
@@ -53,5 +62,26 @@ public class OrbitManager : MonoBehaviour {
             orbits[i].orbitLine.startWidth = width;
             orbits[i].orbitLine.endWidth = width;
         }
+    }
+
+    public void SelectOrbit(Orbit orbit) {
+        selectedOrbit = orbit;
+    }
+
+    public void SelectPlanet(Planet planet) {
+        selectedPlanet = planet;
+    }
+
+    public void UpdateOrbit() {
+        try {
+            selectedOrbit.ra = float.Parse(raInput.text) * Globals.KM_TO_SCALE;
+            selectedOrbit.rp = float.Parse(rpInput.text) * Globals.KM_TO_SCALE;
+            selectedOrbit.SetLittleOmega(float.Parse(littleOmegaInput.text) * Globals.DEG_TO_RAD);
+        } catch (FormatException exception) {
+            Debug.Log(exception.ToString());
+            return;
+        }
+        selectedOrbit.SolveRaRp();
+        selectedOrbit.UpdateOrbitLine();
     }
 }

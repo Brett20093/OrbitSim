@@ -30,7 +30,9 @@ public class CamInteract : MonoBehaviour
             RaycastHit2D rayHit = Physics2D.GetRayIntersection(Camera.main.ScreenPointToRay(Input.mousePosition));
             if (rayHit && rayHit.transform.GetComponent<Orbit>() != null) {
                 orbitScript = rayHit.transform.GetComponent<Orbit>();
-                planetScript = orbitScript.getPlanetScript();
+                planetScript = orbitScript.GetPlanetScript();
+                OrbitManager.instance.SelectOrbit(orbitScript);
+                OrbitManager.instance.SelectPlanet(planetScript);
             }
         }
 
@@ -47,16 +49,16 @@ public class CamInteract : MonoBehaviour
         sec = sec % 60;
 
         timeText.text = days + "d : " + hours + "h : " + mins + "m : " + sec + "s";
-        string rt = String.Format("{0:#,###.##}", orbitScript.getR() / Globals.KM_TO_SCALE);
+        string rt = String.Format("{0:#,###.##}", orbitScript.GetR() / Globals.KM_TO_SCALE);
         rText.text = rt + " km";
-        float ta = orbitScript.getTrueAnom();
+        float ta = orbitScript.GetTrueAnom();
         if (ta < 0) {
             ta += 2.0f * Mathf.PI;
         }
         ta *= Globals.RAD_TO_DEG;
         string tat = String.Format("{0:#,###.##}", ta);
         trueAnomText.text = tat + "°";
-        string vt = String.Format("{0:#,###.##}", orbitScript.getVelo() / Globals.KM_TO_SCALE);
+        string vt = String.Format("{0:#,###.##}", orbitScript.GetVelo() / Globals.KM_TO_SCALE);
         veloText.text = vt + " km/s";
     }
 }

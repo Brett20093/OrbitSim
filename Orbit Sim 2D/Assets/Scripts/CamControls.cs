@@ -18,6 +18,7 @@ public class CamControls : MonoBehaviour
     private Vector3 focusPosition = new Vector3(0,0,0);
     private GameObject focusGO = null;
     private int focusIndex = -1;
+
     // Start is called before the first frame update
     void Start()
     {

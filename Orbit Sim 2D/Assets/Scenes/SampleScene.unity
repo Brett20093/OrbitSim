@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &69443162
 RectTransform:
   m_ObjectHideFlags: 0
@@ -207,8 +207,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Satellite, Assembly-CSharp
+      - m_Target: {fileID: 577286274}
+        m_TargetAssemblyTypeName: OrbitManager, Assembly-CSharp
         m_MethodName: UpdateOrbit
         m_Mode: 1
         m_Arguments:
@@ -343,7 +343,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &184549394
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1056,7 +1056,6 @@ GameObject:
   - component: {fileID: 577286273}
   - component: {fileID: 577286272}
   - component: {fileID: 577286274}
-  - component: {fileID: 577286275}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -1104,20 +1103,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03ce161f90c4852499fc3866569d1b4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rpInput: {fileID: 184549395}
+  raInput: {fileID: 2015547576}
+  littleOmegaInput: {fileID: 834174016}
   planets: []
   orbits: []
---- !u!114 &577286275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 577286271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84dbf5a81eba2be4d94e7610d9503dad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &703725071
 GameObject:
   m_ObjectHideFlags: 0
@@ -1324,7 +1314,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &834174015
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3101,7 +3091,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2015547575
 RectTransform:
   m_ObjectHideFlags: 0
