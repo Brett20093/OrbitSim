@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class CamInteract : MonoBehaviour
-{
+public class CamInteract : MonoBehaviour {
+    [SerializeField] private TMP_Text orbitingPlanet;
+    [SerializeField] private TMP_Text orbitInfo;
     [SerializeField] private TMP_Text timeText;
-    [SerializeField] private TMP_Text rText;
-    [SerializeField] private TMP_Text trueAnomText;
-    [SerializeField] private TMP_Text veloText;
 
     [SerializeField] private GameObject startingSatellite;
     [SerializeField] private GameObject startingPlanet;
@@ -21,6 +19,7 @@ public class CamInteract : MonoBehaviour
     {
         orbitScript = startingSatellite.GetComponent<Orbit>();
         planetScript = startingPlanet.GetComponent<Planet>();
+        orbitingPlanet.text = "Orbiting " + planetScript.name;
     }
 
     // Update is called once per frame
@@ -33,6 +32,7 @@ public class CamInteract : MonoBehaviour
                 planetScript = orbitScript.GetPlanetScript();
                 OrbitManager.instance.SelectOrbit(orbitScript);
                 OrbitManager.instance.SelectPlanet(planetScript);
+                orbitingPlanet.text = "Orbiting " + planetScript.name;
             }
         }
 
@@ -48,17 +48,19 @@ public class CamInteract : MonoBehaviour
         int mins = sec / 60;
         sec = sec % 60;
 
-        timeText.text = days + "d : " + hours + "h : " + mins + "m : " + sec + "s";
+        timeText.text = "Time: " + days + "d : " + hours + "h : " + mins + "m : " + sec + "s";
+        string orbitInfoText = "";
         string rt = String.Format("{0:#,###.##}", orbitScript.GetR() / Globals.KM_TO_SCALE);
-        rText.text = rt + " km";
+        orbitInfoText += "r: " + rt + " km\n";
         float ta = orbitScript.GetTrueAnom();
         if (ta < 0) {
             ta += 2.0f * Mathf.PI;
         }
         ta *= Globals.RAD_TO_DEG;
         string tat = String.Format("{0:#,###.##}", ta);
-        trueAnomText.text = tat + "°";
+        orbitInfoText += "\u03B8: " + tat + "°\n";
         string vt = String.Format("{0:#,###.##}", orbitScript.GetVelo() / Globals.KM_TO_SCALE);
-        veloText.text = vt + " km/s";
+        orbitInfoText += "V: " + vt + " km/s";
+        orbitInfo.text = orbitInfoText;
     }
 }

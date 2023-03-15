@@ -25,6 +25,7 @@ public class CamControls : MonoBehaviour
         cam = GetComponent<Camera>();
         float multiplier = Mathf.Pow(camZoomFactor, 3.0f);
         SetCamZoom(multiplier);
+        Globals.timeMultiplier = Mathf.Pow(timeMultFactor, 3.0f) * MAX_TIME_FACTOR + 1.0f;
     }
 
     private void SetCamZoom(float multiplier) {
