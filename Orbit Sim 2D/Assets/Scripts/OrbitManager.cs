@@ -22,6 +22,7 @@ public class OrbitManager : MonoBehaviour {
 
     public List<Planet> planets = new List<Planet>();
     public List<Orbit> orbits = new List<Orbit>();
+    public List<GameObject> popups = new List<GameObject>();
 
     private Planet selectedPlanet;
     private Orbit selectedOrbit;
@@ -55,6 +56,14 @@ public class OrbitManager : MonoBehaviour {
     }
     public void RemoveOrbit(Orbit orbit) {
         orbits.Remove(orbit);
+    }
+
+    public void AddPopup(GameObject popup) {
+        if (!popups.Contains(popup))
+            popups.Add(popup);
+    }
+    public void RemoveOrbit(GameObject popup) {
+        popups.Remove(popup);
     }
 
     public void SetOrbitLineWidths(float width) {

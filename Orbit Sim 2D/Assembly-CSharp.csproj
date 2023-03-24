@@ -61,6 +61,7 @@
     <Compile Include="Assets\Scripts\Orbit.cs" />
     <Compile Include="Assets\Scripts\CamControls.cs" />
     <Compile Include="Assets\Scripts\OrbitManager.cs" />
+    <Compile Include="Assets\Scripts\DraggableWindow.cs" />
     <Compile Include="Assets\Scripts\Planet.cs" />
     <Compile Include="Assets\Scripts\Satellite.cs" />
     <Compile Include="Assets\Scripts\Globals.cs" />
