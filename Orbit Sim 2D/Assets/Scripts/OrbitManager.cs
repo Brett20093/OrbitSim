@@ -22,7 +22,7 @@ public class OrbitManager : MonoBehaviour {
 
     public List<Planet> planets = new List<Planet>();
     public List<Orbit> orbits = new List<Orbit>();
-    public List<GameObject> popups = new List<GameObject>();
+    public List<Popup> popups = new List<Popup>();
 
     private Planet selectedPlanet;
     private Orbit selectedOrbit;
@@ -58,12 +58,24 @@ public class OrbitManager : MonoBehaviour {
         orbits.Remove(orbit);
     }
 
-    public void AddPopup(GameObject popup) {
+    public void AddPopup(Popup popup) {
+        if (CheckDuplicatePopup(popup.orbitScript.name)) {
+            popup.ClosePopup();
+            return;
+        }
         if (!popups.Contains(popup))
             popups.Add(popup);
     }
-    public void RemoveOrbit(GameObject popup) {
+    public void RemovePopup(Popup popup) {
         popups.Remove(popup);
+    }
+    public bool CheckDuplicatePopup(string orbitName) {
+        foreach(Popup pop in popups) {
+            if (pop.orbitScript.name == orbitName) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void SetOrbitLineWidths(float width) {
