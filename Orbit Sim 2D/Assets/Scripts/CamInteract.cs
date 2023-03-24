@@ -26,17 +26,7 @@ public class CamInteract : MonoBehaviour {
                     goto SkipOrbitAdd;
                 }
 
-                GameObject newPrefab = Instantiate(popupPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-                newPrefab.transform.SetParent(canvas.transform);
-                newPrefab.transform.localPosition = new Vector3(0, 0, 0);
-                newPrefab.transform.localScale = new Vector3(0.4326068f, 0.4326068f, 0.4326068f);
-                Popup popup = newPrefab.GetComponent<Popup>();
-                popup.planetScript = planetScript;
-                popup.orbitScript = orbitScript;
-                popup.popupType = Popup.POPUP_TYPE.ORBIT;
-                popup.popupID = id;
-                popup.transform.Find("SelectNamePanel").GetComponent<DraggableWindow>().canvas = canvas;
-                OrbitManager.instance.AddPopup(newPrefab.GetComponent<Popup>());
+                AddPopupPrefab(id, Popup.POPUP_TYPE.ORBIT);
             }
             SkipOrbitAdd:
             if (rayHit && rayHit.transform.GetComponent<Planet>() != null) {
@@ -48,18 +38,22 @@ public class CamInteract : MonoBehaviour {
                     return;
                 }
 
-                GameObject newPrefab = Instantiate(popupPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-                newPrefab.transform.SetParent(canvas.transform);
-                newPrefab.transform.localPosition = new Vector3(0, 0, 0);
-                newPrefab.transform.localScale = new Vector3(0.4326068f, 0.4326068f, 0.4326068f);
-                Popup popup = newPrefab.GetComponent<Popup>();
-                popup.planetScript = planetScript;
-                popup.orbitScript = orbitScript;
-                popup.popupType = Popup.POPUP_TYPE.PLANET;
-                popup.popupID = id;
-                popup.transform.Find("SelectNamePanel").GetComponent<DraggableWindow>().canvas = canvas;
-                OrbitManager.instance.AddPopup(newPrefab.GetComponent<Popup>());
+                AddPopupPrefab(id, Popup.POPUP_TYPE.PLANET);
             }
         }
+    }
+
+    private void AddPopupPrefab(string id, Popup.POPUP_TYPE popupType) {
+        GameObject newPrefab = Instantiate(popupPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        newPrefab.transform.SetParent(canvas.transform);
+        newPrefab.transform.localPosition = new Vector3(0, 0, 0);
+        newPrefab.transform.localScale = new Vector3(0.4326068f, 0.4326068f, 0.4326068f);
+        Popup popup = newPrefab.GetComponent<Popup>();
+        popup.planetScript = planetScript;
+        popup.orbitScript = orbitScript;
+        popup.popupType = popupType;
+        popup.popupID = id;
+        popup.transform.Find("SelectNamePanel").GetComponent<DraggableWindow>().canvas = canvas;
+        OrbitManager.instance.AddPopup(newPrefab.GetComponent<Popup>());
     }
 }

@@ -34,31 +34,13 @@ public class Popup : MonoBehaviour {
         sec = sec % 3600;
         int mins = sec / 60;
         sec = sec % 60;
+        string time = "Time: " + days + "d : " + hours + "h : " + mins + "m : " + sec + "s\n";
 
         string infoText = "";
         if (popupType == POPUP_TYPE.ORBIT) {
-            infoText += "Orbiting " + planetScript.name + "\n";
-            infoText += "Time: " + days + "d : " + hours + "h : " + mins + "m : " + sec + "s\n";
-            string rt = String.Format("{0:#,##0.00}", orbitScript.GetR() / Globals.KM_TO_SCALE);
-            infoText += "r: " + rt + " km\n";
-            float ta = orbitScript.GetTrueAnom();
-            if (ta < 0) {
-                ta += 2.0f * Mathf.PI;
-            }
-            ta *= Globals.RAD_TO_DEG;
-            string tat = String.Format("{0:#,##0.00}", ta);
-            infoText += "\u03B8: " + tat + "°\n";
-            string vt = String.Format("{0:#,##0.00}", orbitScript.GetVelo() / Globals.KM_TO_SCALE);
-            infoText += "V: " + vt + " km/s";
+            infoText = UpdateOrbitInfo(time);
         } else if(popupType == POPUP_TYPE.PLANET) {
-            infoText += "Time: " + days + "d : " + hours + "h : " + mins + "m : " + sec + "s\n";
-            string m = String.Format("{0:#.#####E+00}", planetScript.GetMass());
-            infoText += "Mass: " + m + " kg\n";
-            float r = planetScript.radius / Globals.KM_TO_SCALE;
-            string a = String.Format("{0:#,##0.000}", planetScript.gravParameter / Mathf.Pow(Globals.KM_TO_SCALE, 3) / Mathf.Pow(r,2)*Globals.KM_TO_M);
-            infoText += "Grav Accel: " + a + " m/s^2\n";
-            string rt = String.Format("{0:#,##0.00}", planetScript.radius / Globals.KM_TO_SCALE);
-            infoText += "Radius: " + rt + " km\n";
+            infoText = UpdatePlanetInfo(time);
         }
         info.text = infoText;
     }
@@ -66,5 +48,36 @@ public class Popup : MonoBehaviour {
     public void ClosePopup() {
         OrbitManager.instance.RemovePopup(this);
         Destroy(this.gameObject);
+    }
+
+    private string UpdateOrbitInfo(string time) {
+        string infoText = "";
+        infoText += "Orbiting " + planetScript.name + "\n";
+        infoText += time;
+        string rt = String.Format("{0:#,##0.00}", orbitScript.GetR() / Globals.KM_TO_SCALE);
+        infoText += "r: " + rt + " km\n";
+        float ta = orbitScript.GetTrueAnom();
+        if (ta < 0) {
+            ta += 2.0f * Mathf.PI;
+        }
+        ta *= Globals.RAD_TO_DEG;
+        string tat = String.Format("{0:#,##0.00}", ta);
+        infoText += "\u03B8: " + tat + "°\n";
+        string vt = String.Format("{0:#,##0.00}", orbitScript.GetVelo() / Globals.KM_TO_SCALE);
+        infoText += "V: " + vt + " km/s";
+        return infoText;
+    }
+
+    private string UpdatePlanetInfo(string time) {
+        string infoText = "";
+        infoText += time;
+        string m = String.Format("{0:#.#####E+00}", planetScript.GetMass());
+        infoText += "Mass: " + m + " kg\n";
+        float r = planetScript.radius / Globals.KM_TO_SCALE;
+        string a = String.Format("{0:#,##0.000}", planetScript.gravParameter / Mathf.Pow(Globals.KM_TO_SCALE, 3) / Mathf.Pow(r, 2) * Globals.KM_TO_M);
+        infoText += "Grav Accel: " + a + " m/s^2\n";
+        string rt = String.Format("{0:#,##0.00}", planetScript.radius / Globals.KM_TO_SCALE);
+        infoText += "Radius: " + rt + " km\n";
+        return infoText;
     }
 }
