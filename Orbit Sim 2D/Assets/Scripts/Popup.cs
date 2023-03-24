@@ -4,18 +4,26 @@ using TMPro;
 using UnityEngine;
 
 public class Popup : MonoBehaviour {
+    public enum POPUP_TYPE { PLANET, ORBIT}
     private TMP_Text selectedName;
     private TMP_Text orbitingPlanet;
-    private TMP_Text orbitInfo;
+    private TMP_Text info;
+    public POPUP_TYPE popupType;
     public Orbit orbitScript;
     public Planet planetScript;
+    public string popupID;
 
     void Start() {
         selectedName = transform.Find("SelectNamePanel").Find("SelectName").GetComponent<TMP_Text>();
-        orbitingPlanet = transform.Find("OrbitingPlanet").GetComponent<TMP_Text>();
-        orbitInfo = transform.Find("OrbitInfo").GetComponent<TMP_Text>();
-        orbitingPlanet.text = "Orbiting " + planetScript.name;
-        selectedName.text = orbitScript.name;
+        info = transform.Find("OrbitInfo").GetComponent<TMP_Text>();
+        switch (popupType) {
+            case POPUP_TYPE.PLANET:
+                selectedName.text = planetScript.name + " Planet Info";
+                break;
+            case POPUP_TYPE.ORBIT:
+                selectedName.text = orbitScript.name + " Orbit Info";
+                break;
+        }
     }
 
     void Update() {
@@ -27,19 +35,32 @@ public class Popup : MonoBehaviour {
         int mins = sec / 60;
         sec = sec % 60;
 
-        string orbitInfoText = "Time: " + days + "d : " + hours + "h : " + mins + "m : " + sec + "s\n";
-        string rt = String.Format("{0:#,##0.00}", orbitScript.GetR() / Globals.KM_TO_SCALE);
-        orbitInfoText += "r: " + rt + " km\n";
-        float ta = orbitScript.GetTrueAnom();
-        if (ta < 0) {
-            ta += 2.0f * Mathf.PI;
+        string infoText = "";
+        if (popupType == POPUP_TYPE.ORBIT) {
+            infoText += "Orbiting " + planetScript.name + "\n";
+            infoText += "Time: " + days + "d : " + hours + "h : " + mins + "m : " + sec + "s\n";
+            string rt = String.Format("{0:#,##0.00}", orbitScript.GetR() / Globals.KM_TO_SCALE);
+            infoText += "r: " + rt + " km\n";
+            float ta = orbitScript.GetTrueAnom();
+            if (ta < 0) {
+                ta += 2.0f * Mathf.PI;
+            }
+            ta *= Globals.RAD_TO_DEG;
+            string tat = String.Format("{0:#,##0.00}", ta);
+            infoText += "\u03B8: " + tat + "°\n";
+            string vt = String.Format("{0:#,##0.00}", orbitScript.GetVelo() / Globals.KM_TO_SCALE);
+            infoText += "V: " + vt + " km/s";
+        } else if(popupType == POPUP_TYPE.PLANET) {
+            infoText += "Time: " + days + "d : " + hours + "h : " + mins + "m : " + sec + "s\n";
+            string m = String.Format("{0:#.#####E+00}", planetScript.GetMass());
+            infoText += "Mass: " + m + " kg\n";
+            float r = planetScript.radius / Globals.KM_TO_SCALE;
+            string a = String.Format("{0:#,##0.000}", planetScript.gravParameter / Mathf.Pow(Globals.KM_TO_SCALE, 3) / Mathf.Pow(r,2)*Globals.KM_TO_M);
+            infoText += "Grav Accel: " + a + " m/s^2\n";
+            string rt = String.Format("{0:#,##0.00}", planetScript.radius / Globals.KM_TO_SCALE);
+            infoText += "Radius: " + rt + " km\n";
         }
-        ta *= Globals.RAD_TO_DEG;
-        string tat = String.Format("{0:#,##0.00}", ta);
-        orbitInfoText += "\u03B8: " + tat + "°\n";
-        string vt = String.Format("{0:#,##0.00}", orbitScript.GetVelo() / Globals.KM_TO_SCALE);
-        orbitInfoText += "V: " + vt + " km/s";
-        orbitInfo.text = orbitInfoText;
+        info.text = infoText;
     }
 
     public void ClosePopup() {

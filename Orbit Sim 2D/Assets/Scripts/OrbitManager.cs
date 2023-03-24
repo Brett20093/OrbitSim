@@ -59,7 +59,7 @@ public class OrbitManager : MonoBehaviour {
     }
 
     public void AddPopup(Popup popup) {
-        if (CheckDuplicatePopup(popup.orbitScript.name)) {
+        if (CheckDuplicatePopup(popup.popupID)) {
             popup.ClosePopup();
             return;
         }
@@ -69,9 +69,9 @@ public class OrbitManager : MonoBehaviour {
     public void RemovePopup(Popup popup) {
         popups.Remove(popup);
     }
-    public bool CheckDuplicatePopup(string orbitName) {
+    public bool CheckDuplicatePopup(string popupID) {
         foreach(Popup pop in popups) {
-            if (pop.orbitScript.name == orbitName) {
+            if (pop.popupID == popupID) {
                 return true;
             }
         }

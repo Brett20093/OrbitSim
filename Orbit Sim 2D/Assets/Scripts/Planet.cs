@@ -6,12 +6,14 @@ public class Planet : MonoBehaviour
 {
     public float gravParameter = 398600.0f; // km^3 * s^-2
     public float radius = 6378.1f; // km
+    private float mass;
     public bool isSatellite = false;
     [SerializeField] public float secInPlanetDay = 86400.0f;
 
     private float timeOfPlanetDay = 0.0f;
 
     private void Awake() {
+        mass = gravParameter * Mathf.Pow(Globals.KM_TO_M, 3) / Globals.GRAV_CONST;
         gravParameter *= Mathf.Pow(Globals.KM_TO_SCALE, 3);
         radius *= Globals.KM_TO_SCALE;
     }
@@ -31,5 +33,9 @@ public class Planet : MonoBehaviour
             var rotation = Quaternion.AngleAxis((float)rotationRad, Vector3.forward);
             transform.rotation = rotation;
         }
+    }
+
+    public float GetMass() {
+        return mass;
     }
 }
