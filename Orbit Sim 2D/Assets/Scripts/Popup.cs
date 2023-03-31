@@ -5,23 +5,26 @@ using UnityEngine;
 
 public class Popup : MonoBehaviour {
     public enum POPUP_TYPE { PLANET, ORBIT}
-    private TMP_Text selectedName;
-    private TMP_Text orbitingPlanet;
-    private TMP_Text info;
+    [SerializeField] private TMP_Text selectedName;
+    [SerializeField] private TMP_Text info;
+    [SerializeField] private TMP_InputField rpInput;
+    [SerializeField] private TMP_InputField raInput;
+    [SerializeField] private TMP_InputField omegaInput;
+    [SerializeField] private GameObject editOrbitPanel;
     public POPUP_TYPE popupType;
     public Orbit orbitScript;
     public Planet planetScript;
     public string popupID;
 
     void Start() {
-        selectedName = transform.Find("SelectNamePanel").Find("SelectName").GetComponent<TMP_Text>();
-        info = transform.Find("OrbitInfo").GetComponent<TMP_Text>();
         switch (popupType) {
             case POPUP_TYPE.PLANET:
                 selectedName.text = planetScript.name + " Planet Info";
+                editOrbitPanel.SetActive(false);
                 break;
             case POPUP_TYPE.ORBIT:
                 selectedName.text = orbitScript.name + " Orbit Info";
+                editOrbitPanel.SetActive(true);
                 break;
         }
     }
@@ -48,6 +51,19 @@ public class Popup : MonoBehaviour {
     public void ClosePopup() {
         OrbitManager.instance.RemovePopup(this);
         Destroy(this.gameObject);
+    }
+
+    public void UpdateOrbit() {
+        try {
+            orbitScript.ra = float.Parse(raInput.text) * Globals.KM_TO_SCALE;
+            orbitScript.rp = float.Parse(rpInput.text) * Globals.KM_TO_SCALE;
+            orbitScript.littleOmega = float.Parse(rpInput.text) * Globals.DEG_TO_RAD;
+        } catch (FormatException exception) {
+            Debug.Log(exception.ToString());
+            return;
+        }
+        orbitScript.SolveRaRp();
+        orbitScript.UpdateOrbitLine();
     }
 
     private string UpdateOrbitInfo(string time) {

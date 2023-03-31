@@ -13,7 +13,7 @@ public class Orbit : MonoBehaviour
     [SerializeField] private int numTries = 10;
     [SerializeField] private int resolution = 10000;
 
-    [SerializeField] protected float littleOmega = 0.0f;
+    [SerializeField] public float littleOmega = 0.0f;
 
     public float ra = 2000;
     public float rp = 1000;
@@ -135,10 +135,6 @@ public class Orbit : MonoBehaviour
         }
 
         return positions;
-    }
-
-    public void SetLittleOmega(float lo) {
-        littleOmega = lo;
     }
 
     public float GetTrueAnom() { return trueAnom; }

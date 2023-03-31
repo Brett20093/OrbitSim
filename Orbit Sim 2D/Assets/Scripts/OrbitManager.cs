@@ -97,7 +97,7 @@ public class OrbitManager : MonoBehaviour {
         try {
             selectedOrbit.ra = float.Parse(raInput.text) * Globals.KM_TO_SCALE;
             selectedOrbit.rp = float.Parse(rpInput.text) * Globals.KM_TO_SCALE;
-            selectedOrbit.SetLittleOmega(float.Parse(littleOmegaInput.text) * Globals.DEG_TO_RAD);
+            selectedOrbit.littleOmega = (float.Parse(littleOmegaInput.text) * Globals.DEG_TO_RAD);
         } catch (FormatException exception) {
             Debug.Log(exception.ToString());
             return;
