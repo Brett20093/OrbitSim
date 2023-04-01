@@ -10,7 +10,10 @@ public class Popup : MonoBehaviour {
     [SerializeField] private TMP_InputField rpInput;
     [SerializeField] private TMP_InputField raInput;
     [SerializeField] private TMP_InputField omegaInput;
+    [SerializeField] private TMP_InputField gravParamInput;
+    [SerializeField] private TMP_InputField radiusInput;
     [SerializeField] private GameObject editOrbitPanel;
+    [SerializeField] private GameObject editPlanetPanel;
     public POPUP_TYPE popupType;
     public Orbit orbitScript;
     public Planet planetScript;
@@ -20,10 +23,12 @@ public class Popup : MonoBehaviour {
         switch (popupType) {
             case POPUP_TYPE.PLANET:
                 selectedName.text = planetScript.name + " Planet Info";
+                editPlanetPanel.SetActive(true);
                 editOrbitPanel.SetActive(false);
                 break;
             case POPUP_TYPE.ORBIT:
                 selectedName.text = orbitScript.name + " Orbit Info";
+                editPlanetPanel.SetActive(false);
                 editOrbitPanel.SetActive(true);
                 break;
         }
@@ -66,6 +71,21 @@ public class Popup : MonoBehaviour {
         orbitScript.UpdateOrbitLine();
     }
 
+    public void UpdatePlanet() {
+        try {
+            planetScript.gravParameter = float.Parse(gravParamInput.text) * Mathf.Pow(Globals.KM_TO_SCALE, 3);
+            planetScript.radius = float.Parse(radiusInput.text) * Globals.KM_TO_SCALE;
+        } catch (FormatException exception) {
+            Debug.Log(exception.ToString());
+            return;
+        }
+        planetScript.UpdatePlanet();
+        foreach(Orbit orbit in OrbitManager.instance.orbits) {
+            orbit.SolveRaRp();
+            orbit.UpdateOrbitLine();
+        }
+    }
+
     private string UpdateOrbitInfo(string time) {
         string infoText = "";
         infoText += "Orbiting " + planetScript.name + "\n";
@@ -90,7 +110,7 @@ public class Popup : MonoBehaviour {
         string m = String.Format("{0:#.#####E+00}", planetScript.GetMass());
         infoText += "Mass: " + m + " kg\n";
         float r = planetScript.radius / Globals.KM_TO_SCALE;
-        string a = String.Format("{0:#,##0.000}", planetScript.gravParameter / Mathf.Pow(Globals.KM_TO_SCALE, 3) / Mathf.Pow(r, 2) * Globals.KM_TO_M);
+        string a = String.Format("{0:#,##0.000}", planetScript.gravAccel);
         infoText += "Grav Accel: " + a + " m/s^2\n";
         string rt = String.Format("{0:#,##0.00}", planetScript.radius / Globals.KM_TO_SCALE);
         infoText += "Radius: " + rt + " km\n";

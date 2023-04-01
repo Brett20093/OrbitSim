@@ -6,6 +6,7 @@ public class Planet : MonoBehaviour
 {
     public float gravParameter = 398600.0f; // km^3 * s^-2
     public float radius = 6378.1f; // km
+    public float gravAccel;
     private float mass;
     public bool isSatellite = false;
     [SerializeField] public float secInPlanetDay = 86400.0f;
@@ -16,14 +17,20 @@ public class Planet : MonoBehaviour
         mass = gravParameter * Mathf.Pow(Globals.KM_TO_M, 3) / Globals.GRAV_CONST;
         gravParameter *= Mathf.Pow(Globals.KM_TO_SCALE, 3);
         radius *= Globals.KM_TO_SCALE;
+        gravAccel = gravParameter / Mathf.Pow(Globals.KM_TO_SCALE, 3) / Mathf.Pow(radius / Globals.KM_TO_SCALE, 2) * Globals.KM_TO_M;
     }
-
-    // Start is called before the first frame update
 
     protected void Start()
     {
         transform.localScale = new Vector2(radius * 2.0f, radius * 2.0f);
         OrbitManager.instance.AddPlanet(this);
+    }
+
+    public void UpdatePlanet() {
+        // Assumes radius and gravParameter are properly set to game scale units.
+        transform.localScale = new Vector2(radius * 2.0f, radius * 2.0f);
+        gravAccel = gravParameter / Mathf.Pow(Globals.KM_TO_SCALE, 3) / Mathf.Pow(radius / Globals.KM_TO_SCALE, 2) * Globals.KM_TO_M;
+        mass = gravParameter / Mathf.Pow(Globals.KM_TO_SCALE, 3) * Mathf.Pow(Globals.KM_TO_M, 3) / Globals.GRAV_CONST;
     }
 
     protected void Update() {
