@@ -13,7 +13,7 @@ public class CamControls : MonoBehaviour
     private const float MAX_CAM_DISTANCE = 100000.0f;
     private float timeMultFactor = 0.01f;
     private const float MAX_TIME_FACTOR = 100000.0f;
-    private const float MAX_LINE_WIDTH = 500.0f;
+    private const float MAX_LINE_WIDTH = 100.0f;
     private const float MAX_CAM_SPEED = 100000.0f;
     private Vector3 focusPosition = new Vector3(0,0,0);
     private GameObject focusGO = null;

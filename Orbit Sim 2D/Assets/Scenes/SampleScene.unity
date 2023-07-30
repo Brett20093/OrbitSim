@@ -593,8 +593,12 @@ MonoBehaviour:
   numTries: 10
   resolution: 10000
   littleOmega: 0
+  trueAnom: 0
+  solveType: 1
   ra: 6800.1
   rp: 6791.1
+  r: 6000
+  velo: 14
   orbitLine: {fileID: 0}
 --- !u!114 &1232183225
 MonoBehaviour:
@@ -951,6 +955,10 @@ PrefabInstance:
       value: 2551444
       objectReference: {fileID: 0}
     - target: {fileID: 8246124650450529139, guid: 7085bbc645622164cad84da118c43182, type: 3}
+      propertyPath: r
+      value: 15000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8246124650450529139, guid: 7085bbc645622164cad84da118c43182, type: 3}
       propertyPath: ra
       value: 405500
       objectReference: {fileID: 0}
@@ -959,9 +967,17 @@ PrefabInstance:
       value: 363300
       objectReference: {fileID: 0}
     - target: {fileID: 8246124650450529139, guid: 7085bbc645622164cad84da118c43182, type: 3}
+      propertyPath: velo
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8246124650450529139, guid: 7085bbc645622164cad84da118c43182, type: 3}
       propertyPath: planet
       value: 
       objectReference: {fileID: 1024960905}
+    - target: {fileID: 8246124650450529139, guid: 7085bbc645622164cad84da118c43182, type: 3}
+      propertyPath: solveType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8246124650450529139, guid: 7085bbc645622164cad84da118c43182, type: 3}
       propertyPath: littleOmega
       value: 0

@@ -60,15 +60,12 @@ public class Popup : MonoBehaviour {
 
     public void UpdateOrbit() {
         try {
-            orbitScript.ra = float.Parse(raInput.text) * Globals.KM_TO_SCALE;
-            orbitScript.rp = float.Parse(rpInput.text) * Globals.KM_TO_SCALE;
-            orbitScript.littleOmega = float.Parse(rpInput.text) * Globals.DEG_TO_RAD;
+            orbitScript.GivenRpRaSolve(float.Parse(rpInput.text) * Globals.KM_TO_SCALE, 
+                float.Parse(raInput.text) * Globals.KM_TO_SCALE, float.Parse(omegaInput.text) * Globals.DEG_TO_RAD);
         } catch (FormatException exception) {
             Debug.Log(exception.ToString());
             return;
         }
-        orbitScript.SolveRaRp();
-        orbitScript.UpdateOrbitLine();
     }
 
     public void UpdatePlanet() {
@@ -81,8 +78,7 @@ public class Popup : MonoBehaviour {
         }
         planetScript.UpdatePlanet();
         foreach(Orbit orbit in OrbitManager.instance.orbits) {
-            orbit.SolveRaRp();
-            orbit.UpdateOrbitLine();
+            orbit.PlanetUpdate();
         }
     }
 
